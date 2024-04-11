@@ -45,7 +45,7 @@ def generate_unique_matrices(num_matrices, num_rows, num_columns, mean, std_dev,
 mean_t = 2.
 std_dev_t = 1  # Larger standard deviation for more dispersed values
 # Define the dimensions of the matrix
-num_matrices_t = 10
+num_matrices_t = 20
 num_rows_t = 6
 num_columns_t = 3
 # Generate unique matrices for transmitters
@@ -55,7 +55,7 @@ t_matrices = generate_unique_matrices(num_matrices_t, num_rows_t, num_columns_t,
 #Users position
 # Mean and standard deviation of the values
 mean_u = 2.15
-std_dev_u= 0.1  # Larger standard deviation for more dispersed values
+std_dev_u= 2.0  # Larger standard deviation for more dispersed values (0.1 for small separation)
 # Define the dimensions of the matrix
 num_matrices_u = 50
 num_rows_u = 4
