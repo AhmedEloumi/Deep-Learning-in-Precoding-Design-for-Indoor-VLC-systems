@@ -6,6 +6,8 @@ from R_func import R_func
 from cvx_func_bisection import cvx_func_bisection, cvx_func_bisection_2
 import pandas as pd
 import pickle 
+import pyarrow as pa
+import pyarrow.parquet as pq
 
 # Implementation of the main code
 K = 4  # number of UE
@@ -45,7 +47,7 @@ def generate_unique_matrices(num_matrices, num_rows, num_columns, mean, std_dev,
 mean_t = 2.
 std_dev_t = 1  # Larger standard deviation for more dispersed values
 # Define the dimensions of the matrix
-num_matrices_t = 20
+num_matrices_t = 10
 num_rows_t = 6
 num_columns_t = 3
 # Generate unique matrices for transmitters
@@ -55,9 +57,9 @@ t_matrices = generate_unique_matrices(num_matrices_t, num_rows_t, num_columns_t,
 #Users position
 # Mean and standard deviation of the values
 mean_u = 2.15
-std_dev_u= 2.0  # Larger standard deviation for more dispersed values (0.1 for small separation)
+std_dev_u= 2  # Larger standard deviation for more dispersed values (0.1 for small separation)
 # Define the dimensions of the matrix
-num_matrices_u = 50
+num_matrices_u = 10
 num_rows_u = 4
 num_columns_u = 3
 
@@ -127,25 +129,28 @@ for k, t in enumerate(t_matrices) :
                         t_lower = t_test
                 W = W_works
 
-        # Charger le DataFrame existant à partir du fichier pickle
-        with open('data.pkl', 'rb') as f:
-            df = pickle.load(f)
+        # Load the existing DataFrame from the Parquet file
+        table = pq.read_table('data.parquet')
+        df = table.to_pandas()
 
-        # Convertir les matrices en chaînes de caractères avec des virgules
+        # Convert the matrices to strings with commas
         H_str = np.array2string(H, separator=',')
         W_str = np.array2string(W, separator=',')
+        # t_str= np.array2string(t_matrices, separator=',')
+        # u_str= np.array2string(u_matrices, separator=',')
 
         # Initialize an empty DataFrame
         df1 = pd.DataFrame(columns=['H', 'label'])
 
         df1 = df1._append({'H': H_str, 'label': W_str}, ignore_index=True)
 
-        # Concaténer le DataFrame existant avec le DataFrame de nouvelles données
+        # Concatenate the existing DataFrame with the new DataFrame of data
         df = pd.concat([df, df1], ignore_index=True)
 
-        # Enregistrer le DataFrame mis à jour dans le fichier pickle
-        with open('data.pkl', 'wb') as f:
-            pickle.dump(df, f)
-        
+        # Convert the DataFrame to a PyArrow Table
+        table = pa.Table.from_pandas(df)
+
+        # Write the updated DataFrame to the Parquet file
+        pq.write_table(table, 'data.parquet')
 
 print(df.shape)
