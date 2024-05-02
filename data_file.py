@@ -50,3 +50,20 @@ print(df.head())
 
 
 
+# Initialize an empty DataFrame
+df1 = pd.DataFrame(columns=['T','UE','H', 'label'])
+
+# Add the converted matrices to the DataFrame
+df1 = df1._append({'T':t_str, 'UE': u_str, 'H': H_str, 'label': W_str}, ignore_index=True)
+
+# Save the DataFrame to a Parquet file
+table = pa.Table.from_pandas(df1)
+pq.write_table(table, 'db.parquet')
+
+# Load the DataFrame from the Parquet file
+table = pq.read_table('db.parquet')
+df = table.to_pandas()
+
+# Display information about the shape and the first few rows of the DataFrame
+print(df.shape)
+print(df.head())

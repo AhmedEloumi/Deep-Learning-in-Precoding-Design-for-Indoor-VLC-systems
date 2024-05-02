@@ -57,7 +57,7 @@ t_matrices = generate_unique_matrices(num_matrices_t, num_rows_t, num_columns_t,
 #Users position
 # Mean and standard deviation of the values
 mean_u = 2.15
-std_dev_u= 2  # Larger standard deviation for more dispersed values (0.1 for small separation)
+std_dev_u= 0.1  # Larger standard deviation for more dispersed values (0.1 for small separation)
 # Define the dimensions of the matrix
 num_matrices_u = 10
 num_rows_u = 4
@@ -129,28 +129,26 @@ for k, t in enumerate(t_matrices) :
                         t_lower = t_test
                 W = W_works
 
-        # Load the existing DataFrame from the Parquet file
-        table = pq.read_table('data.parquet')
-        df = table.to_pandas()
+        # Load the existing DataFrame from the pickle file
+        with open('data1.pkl', 'rb') as f:
+            df = pickle.load(f)
 
         # Convert the matrices to strings with commas
         H_str = np.array2string(H, separator=',')
         W_str = np.array2string(W, separator=',')
-        # t_str= np.array2string(t_matrices, separator=',')
-        # u_str= np.array2string(u_matrices, separator=',')
 
         # Initialize an empty DataFrame
         df1 = pd.DataFrame(columns=['H', 'label'])
 
+        # Append the new data to the DataFrame
         df1 = df1._append({'H': H_str, 'label': W_str}, ignore_index=True)
 
         # Concatenate the existing DataFrame with the new DataFrame of data
         df = pd.concat([df, df1], ignore_index=True)
 
-        # Convert the DataFrame to a PyArrow Table
-        table = pa.Table.from_pandas(df)
-
-        # Write the updated DataFrame to the Parquet file
-        pq.write_table(table, 'data.parquet')
+        # Write the updated DataFrame to the pickle file
+        with open('data1.pkl', 'wb') as f:
+            pickle.dump(df, f)
 
 print(df.shape)
+
