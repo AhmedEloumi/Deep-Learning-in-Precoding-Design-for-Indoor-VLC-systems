@@ -1,0 +1,25 @@
+Training Time: 459.3651089668274 seconds
+Prediction Time: 0.4532339572906494 seconds
+
+Mean Squared Error (MSE) on Test Set: 0.156 %
+Mean Absolute Error (MAE) on Test Set: 2.669 %
+Root Mean Squared Error (RMSE) on Test Set: 3.955 %
+R-squared (R2) on Test Set: 74.874 %
+Final Training Loss: 0.08253305568359792
+Final Validation Loss: 0.16027988167479634
+
+for 3 users 
+Optimization Time: 33.705602169036865 seconds
+Prediction Time: 1.2974214553833008 seconds
+
+for 4 users 
+Optimization Time: 59.569732666015625 seconds
+Prediction Time: 2.38075757026672363 seconds
+
+for 5 users 
+Optimization Time: 83.36270260810852 seconds
+Prediction Time: 3.32220935821533203 seconds
+
+for 6 users 
+Optimization Time: 173.70741939544678 seconds
+Prediction Time: 4.3764936923980713 seconds
